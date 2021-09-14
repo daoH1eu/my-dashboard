@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "deploy": "npm run build && npm run start"
+    "start": "node app.js"
   },
   "author": "TruongNQ",
   "license": "ISC",
