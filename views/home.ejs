@@ -9,7 +9,7 @@
         <script src="highcharts.js"></script>
         <script src="export-data.js"></script>
         <script src="accessibility.js"></script>
-        <script>var socket = io("http://localhost:6060")
+        <script>var socket = io.connect();
             
             socket.on("server-update-data", function (data) {//client nhận dữ liệu từ server
                 $("#currentTemp").html(data.temp)
