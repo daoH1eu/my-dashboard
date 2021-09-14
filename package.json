@@ -17,5 +17,6 @@
     "nodemon": "^2.0.7",
     "socket.io": "^2.3.0"
   },
-  "description": ""
+  "description": "",
+  "start": "node app.js"
 }
