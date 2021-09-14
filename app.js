@@ -29,25 +29,25 @@ client.on("connect", function () {//create a listener, waits for the connect eve
 
 client.subscribe("home/dht11");
 
-//-------------------------------------------------CONNECT SQL---------------------------------------------
-// var con = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '1234',
-//     database: 'myDatabase'
-// });
+// -------------------------------------------------CONNECT SQL---------------------------------------------
+var con = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '1234',
+    database: 'myDatabase'
+});
 
-// //---------------------------------------------CREATE TABLE in MySQL-------------------------------------------------
-// con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("MySQL CONNECTED");
-//     var sql = "CREATE TABLE IF NOT EXISTS sensors (ID int(10) not null primary key auto_increment, Time datetime not null, Temperature int(3) not null, Humidity int(3) not null, Lux int(3) not null )"
-//     con.query(sql, function (err) {
-//         if (err)
-//             throw err;
-//         console.log("Table CREATED");
-//     });
-// })
+//---------------------------------------------CREATE TABLE in MySQL-------------------------------------------------
+con.connect(function (err) {
+    if (err) throw err;
+    console.log("MySQL CONNECTED");
+    var sql = "CREATE TABLE IF NOT EXISTS sensors (ID int(10) not null primary key auto_increment, Time datetime not null, Temperature int(3) not null, Humidity int(3) not null, Lux int(3) not null )"
+    con.query(sql, function (err) {
+        if (err)
+            throw err;
+        console.log("Table CREATED");
+    });
+})
 
 // //---------------------------------------- MQTT -> SQL --------------------------------------------
 
