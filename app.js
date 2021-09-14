@@ -31,10 +31,11 @@ client.subscribe("home/dht11");
 
 // -------------------------------------------------CONNECT SQL---------------------------------------------
 var con = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
-    password: '1234',
-    database: 'myDatabase'
+    database: 'myDatabase',
+    port: "3307",
+    password: '1234'
 });
 
 //---------------------------------------------CREATE TABLE in MySQL-------------------------------------------------
