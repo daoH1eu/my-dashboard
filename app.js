@@ -3,7 +3,7 @@ var mysql = require('mysql2')     // Module cho phép sử dụng cơ sở dữ 
 var mqtt = require('mqtt')        // Module cho phép sử dụng giao thức mqtt
 
 var app = express()
-var port = 6060 
+var port = process.env.PORT || 6060
 
 app.use(express.static("public"))
 app.set("views engine", "ejs")
