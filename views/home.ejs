@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Dashboard</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="main2.css">
+        <script src="jquery.js"></script>
+        <script src="socket.io/socket.io.js"> </script>
+        <script src="highcharts.js"></script>
+        <script src="export-data.js"></script>
+        <script src="accessibility.js"></script>
+        <script>var socket = io("http://localhost:6060")
+            
+            socket.on("server-update-data", function (data) {//client nhận dữ liệu từ server
+                $("#currentTemp").html(data.temp)
+                $("#currentHumi").html(data.humi)
+                $("#currentDate").html(data.date)
+                $("#left-body").append("<div class='para'>(" + data.time + ")</div>")
+                $("#center-body").append("<div class='para'>" + data.temp + "</div>")
+                $("#right-body").append("<div class='para'>" + data.humi + "</div>")
+                $("#right2-body").append("<div class='para'>" + data.lux + "</div>")
+            })
+
+            function checkFunction2() {
+                var checkBox = document.getElementById("switch2");
+                if (checkBox.checked == true) {
+                    socket.emit("ledChange", "on") // đẩy data cho server
+                } 
+                else 
+                {
+                    socket.emit("ledChange", "off")
+                }
+            }
+
+            function val_volume(val){
+                socket.emit("volumeChange", val)
+            }
+
+            setInterval(function () {
+                var whatTimeIsThis = new Date()
+                whatTimeIsThis = whatTimeIsThis.toString().slice(4, 24);
+                document.getElementById("RTC").innerHTML = whatTimeIsThis
+            }, 1000)
+        </script>
+    </head>
+    <body>
+        <div id="page">
+            <div id="top">
+                <b>Ngày Tháng: <span id="RTC"></span></b>
+                <div id="right">
+                    <div id="Temp"><b>Nhiệt độ: <span id="currentTemp"></span>°C</b></div>
+                    <div id="Humi"><b>Độ ẩm: <span id="currentHumi"></span>%</b></div>
+                </div>
+            </div>
+            <br>
+            <div id="left">
+                <div id="boxtitle">
+                    <b>Biểu đồ theo dõi</b>
+                </div>
+                <br>
+                <figure class="highcharts-figure">
+                    <div id="container"></div>
+                </figure>
+            </div>
+            
+            <div id="right">
+                <div id="control">
+                    <b><i>Bật/Tắt Đèn
+                        <label class="switch"><input type="checkbox" id="switch2" onclick="checkFunction2()"/>
+                        <span class="slider round"></span></label>
+                    </i></b>     
+                    <!-- <div class="wrapper">
+                        <b><i>VOLUME </i></b>
+                        <input  type= "range" min="0" max="100" value="50" id="volRange" oninput="val_volume(this.value)">
+                    </div> -->
+                </div>
+                <br>
+                <div id="table">
+                    <div id="table-header">
+                        <div id="left-header">
+                            <div id="left-title"><b>Ngày: <span id="currentDate"></span></b></div>
+                        </div>
+                        <div id="center-header">
+                            <div id="center-title"><b>Nhiệt độ(°C)</b></div>
+                        </div>
+                        <div id="right-header" >
+                            <div id="right-title"><b>Độ ẩm(%)</b></div>
+                        </div>
+                        <div id="right2-header" >
+                            <div id="right-title"><b>Ánh sáng</b></div>
+                        </div>
+                    </div>
+                    <div id="table-body">
+                        <div id="left-body">
+
+                        </div>
+                        <div id="center-body">
+        
+                        </div>
+                        <div id="right-body">
+        
+                        </div>
+                        <div id="right2-body">
+        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var chart =  Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Temperature and Humidity'
+                },
+                xAxis: {
+                    title: {
+                    text: 'Date and Time',
+                    },
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Parameters'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0,
+                        borderWidth: 3
+                    }
+                },
+                series: [{
+                    name: 'Độ ẩm %',
+                    data: []
+
+                }, {
+                    name: 'Nhiệt độ °C',
+                    data: []
+
+
+                },{
+                    name: 'Ánh sáng',
+                    data: []
+
+                }]
+            });
+
+            socket.on("server-update-graph", function (data) {
+                chart.series[0].setData(data.humi_graph);
+                chart.series[1].setData(data.temp_graph);
+                chart.series[2].setData(data.lux_graph)
+                chart.xAxis[0].setCategories(data.date_graph);
+            });
+
+        </script>
+    
+    </body>
+</html>
+
+
