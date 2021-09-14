@@ -34,7 +34,7 @@ var con = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
     database: 'myDatabase',
-    port: "3307",
+    port: "3306",
     password: '1234'
 });
 
